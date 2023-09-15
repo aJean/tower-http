@@ -106,6 +106,7 @@ where
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         let this = self.project();
 
+        // 如果 timeout 时间到了，就把这个 future 变为 ready
         if this.sleep.poll(cx).is_ready() {
             let mut res = Response::new(B::default());
             *res.status_mut() = StatusCode::REQUEST_TIMEOUT;

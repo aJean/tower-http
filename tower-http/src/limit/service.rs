@@ -39,6 +39,8 @@ where
     type Error = S::Error;
     type Future = ResponseFuture<S::Future>;
 
+    
+    // 这个在 call 返回的 future 成功后执行，返回内部 service 的结果
     #[inline]
     fn poll_ready(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
         self.inner.poll_ready(cx)
@@ -58,6 +60,7 @@ where
 
         let req = req.map(|body| Limited::new(body, body_limit));
 
+        // 这个 future 判断内部 service 是否执行完成
         ResponseFuture::new(self.inner.call(req))
     }
 }
