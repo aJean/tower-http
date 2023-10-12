@@ -77,6 +77,7 @@ where
         self.inner.poll_ready(cx)
     }
 
+    // 可以在这里直接 Pin Box，也可以再定一个 future
     fn call(&mut self, req: Request<ReqBody>) -> Self::Future {
         let sleep = tokio::time::sleep(self.timeout);
         ResponseFuture {
